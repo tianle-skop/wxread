@@ -90,16 +90,16 @@ class PushNotification:
     def push_slack(self, content, url)
         """SLACK 消息推送"""
         payload = {
-	        "type": "home",
-	        "blocks": [
-		        {
-			        "type": "section",
-			        "text": {
-				        "type": "mrkdwn",
-				        "text": content
-			        }
-		        }
-	        ]
+	    "type": "home",
+	    "blocks": [
+		{
+		    "type": "section",
+		    "text": {
+		        "type": "mrkdwn",
+		        "text": content
+		    }
+	        }
+	    ]
         }
 
         try:
