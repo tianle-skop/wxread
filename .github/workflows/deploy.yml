@@ -46,6 +46,7 @@ jobs:
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         READ_NUM: ${{ vars.READ_NUM }}  # 使用 Repository Variables
+        SLACK_URL: ${{ secrets.SLACK_URL }}
 
       run: |
         python main.py
