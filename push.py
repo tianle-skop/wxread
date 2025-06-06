@@ -89,21 +89,24 @@ class PushNotification:
 
     def push_slack(self, content, url):
         """SLACK 消息推送"""
-        payload = {
-	    "type": "home",
-	    "blocks": [
-		{
-		    "type": "section",
-		    "text": {
-		        "type": "mrkdwn",
-		        "text": content
-		    }
-	        }
-	    ]
-        }
+	payload = json.dumps({
+	  "type": "home",
+	  "blocks": [
+	    {
+	      "type": "section",
+	      "text": {
+	        "type": "mrkdwn",
+	        "text": content
+	      }
+	    }
+	  ]
+	})
+	headers = {
+	  'Content-Type': 'application/json'
+	}
 
         try:
-            response = requests.post(url, payload)
+	    response = requests.request("POST", url, headers=headers, data=payload)
         except requests.exceptions.RequestException as e:
             logger.error("❌ SLACK 推送失败: %s", e)
             # if attempt < attempts - 1:  # 如果不是最后一次尝试
