@@ -87,7 +87,7 @@ class PushNotification:
                     logger.info("将在 %d 秒后重试...", sleep_time)
                     time.sleep(sleep_time)
 
-    def push_slack(self, content, url)
+    def push_slack(self, content, url):
         """SLACK 消息推送"""
         payload = {
 	    "type": "home",
