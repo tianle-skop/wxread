@@ -5,7 +5,7 @@ import time
 import json
 import requests
 import logging
-from config import PUSHPLUS_TOKEN, TELEGRAM_CHAT_ID, TELEGRAM_BOT_TOKEN, WXPUSHER_SPT
+from config import PUSHPLUS_TOKEN, TELEGRAM_CHAT_ID, TELEGRAM_BOT_TOKEN, WXPUSHER_SPT, SLACK_URL
 
 logger = logging.getLogger(__name__)
 
@@ -87,6 +87,29 @@ class PushNotification:
                     logger.info("将在 %d 秒后重试...", sleep_time)
                     time.sleep(sleep_time)
 
+    def push_slack(self, content, url)
+        """SLACK 消息推送"""
+        payload = {
+	        "type": "home",
+	        "blocks": [
+		        {
+			        "type": "section",
+			        "text": {
+				        "type": "mrkdwn",
+				        "text": content
+			        }
+		        }
+	        ]
+        }
+
+        try:
+            response = requests.post(url, payload)
+        except requests.exceptions.RequestException as e:
+            logger.error("❌ SLACK 推送失败: %s", e)
+            # if attempt < attempts - 1:  # 如果不是最后一次尝试
+                # sleep_time = random.randint(180, 360)  # 随机3到6分钟
+                # logger.info("将在 %d 秒后重试...", sleep_time)
+                # time.sleep(sleep_time)
 
 """外部调用"""
 
@@ -104,5 +127,7 @@ def push(content, method):
         return notifier.push_telegram(content, bot_token, chat_id)
     elif method == "wxpusher":
         return notifier.push_wxpusher(content, WXPUSHER_SPT)
+    elif method == "slack":
+        return notifier.push_slack(content, SLACK_URL)
     else:
         raise ValueError("❌ 无效的通知渠道，请选择 'pushplus'、'telegram' 或 'wxpusher'")
