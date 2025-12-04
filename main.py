@@ -47,6 +47,7 @@ def get_wr_skey():
     response = requests.post(RENEW_URL, headers=headers, cookies=cookies,
                              data=json.dumps(COOKIE_DATA, separators=(',', ':')))
     for cookie in response.headers.get('Set-Cookie', '').split(';'):
+        logging.info(f"🍪 刷新后cookie密钥，当前cookie: {cookie}")
         if "wr_skey" in cookie:
             return cookie.split('=')[-1][:8]
     return None
