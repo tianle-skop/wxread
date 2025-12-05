@@ -1,7 +1,6 @@
 # config.py 自定义配置,包括阅读次数、推送token的填写
 import os
 import re
-import logging
 
 """
 可修改区域
@@ -21,7 +20,6 @@ TELEGRAM_CHAT_ID = "" or os.getenv("TELEGRAM_CHAT_ID")
 WXPUSHER_SPT = "" or os.getenv("WXPUSHER_SPT")
 # read接口的bash命令，本地部署时可对应替换headers、cookies
 curl_str = os.getenv('WXREAD_CURL_BASH')
-logging.info(f"📝 读取到的curl命令: {curl_str}")
 SLACK_URL = "" or os.getenv("SLACK_URL")
 
 # headers、cookies是一个省略模版，本地或者docker部署时对应替换

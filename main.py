@@ -8,11 +8,13 @@ import hashlib
 import requests
 import urllib.parse
 from push import push
-from config import data, headers, cookies, READ_NUM, PUSH_METHOD, book, chapter
+from config import curl_str, data, headers, cookies, READ_NUM, PUSH_METHOD, book, chapter
 
 # 配置日志格式
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)-8s - %(message)s')
+
+logging.info(f"📝 读取到的curl命令: {curl_str}")
 
 # 加密盐及其它默认值
 KEY = "3c5c8717f3daf09iop3423zafeqoi"
