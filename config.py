@@ -24,6 +24,7 @@ SERVERCHAN_SPT = "" or os.getenv("SERVERCHAN_SPT")
 
 # read接口的bash命令，本地部署时可对应替换headers、cookies
 curl_str = os.getenv('WXREAD_CURL_BASH')
+SLACK_URL = "" or os.getenv("SLACK_URL")
 
 # headers、cookies是一个省略模版，本地或者docker部署时对应替换
 cookies = {

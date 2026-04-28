@@ -12,6 +12,7 @@ from config import (
     TELEGRAM_BOT_TOKEN,
     TELEGRAM_CHAT_ID,
     WXPUSHER_SPT,
+    SLACK_URL
 )
 
 logger = logging.getLogger(__name__)
@@ -111,6 +112,37 @@ class PushNotification:
                     time.sleep(sleep_time)
         return False
 
+    def push_slack(self, content, url):
+        """SLACK 消息推送"""
+        payload = json.dumps({
+            "type": "home",
+            "blocks": [
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": content
+                }
+                }
+            ]
+        })
+        headers = {
+            'Content-Type': 'application/json'
+        }
+
+        try:
+            response = requests.request("POST", url, headers=headers, data=payload)
+        except requests.exceptions.RequestException as e:
+            logger.error("❌ SLACK 推送失败: %s", e)
+            # if attempt < attempts - 1:  # 如果不是最后一次尝试
+                # sleep_time = random.randint(180, 360)  # 随机3到6分钟
+                # logger.info("将在 %d 秒后重试...", sleep_time)
+                # time.sleep(sleep_time)
+
+        return False
+
+"""外部调用"""
+
 
 def push(content, method):
     notifier = PushNotification()
@@ -130,5 +162,7 @@ def push(content, method):
     if method == "serverchan":
         return notifier.push_serverChan(content, SERVERCHAN_SPT)
 
-    logger.warning("无效的通知渠道 '%s'，已跳过推送。支持：pushplus、telegram、wxpusher、serverchan", method)
+    if method == "slack":
+        return notifier.push_slack(content, SLACK_URL)
+    logger.warning("无效的通知渠道 '%s'，已跳过推送。支持：pushplus、telegram、wxpusher、serverchan、slack", method)
     return False
