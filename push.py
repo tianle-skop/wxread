@@ -114,6 +114,10 @@ class PushNotification:
 
     def push_slack(self, content, url):
         """SLACK 消息推送"""
+        if not url:
+            logger.error("❌ SLACK 推送失败: 未配置 SLACK_URL")
+            return False
+
         payload = json.dumps({
             "type": "home",
             "blocks": [

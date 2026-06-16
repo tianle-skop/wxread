@@ -10,21 +10,21 @@ import re
 # 阅读次数 默认40次/20分钟
 READ_NUM = int(os.getenv('READ_NUM') or 40)
 # 需要推送时可选，可选pushplus、wxpusher、telegram
-PUSH_METHOD = "" or os.getenv('PUSH_METHOD')
+PUSH_METHOD = os.getenv('PUSH_METHOD') or ""
 # pushplus推送时需填
-PUSHPLUS_TOKEN = "" or os.getenv("PUSHPLUS_TOKEN")
+PUSHPLUS_TOKEN = os.getenv("PUSHPLUS_TOKEN") or ""
 # telegram推送时需填
-TELEGRAM_BOT_TOKEN = "" or os.getenv("TELEGRAM_BOT_TOKEN")
-TELEGRAM_CHAT_ID = "" or os.getenv("TELEGRAM_CHAT_ID")
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN") or ""
+TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID") or ""
 # wxpusher推送时需填
-WXPUSHER_SPT = "" or os.getenv("WXPUSHER_SPT")
+WXPUSHER_SPT = os.getenv("WXPUSHER_SPT") or ""
 # SeverChan推送时需填
-SERVERCHAN_SPT = "" or os.getenv("SERVERCHAN_SPT")
+SERVERCHAN_SPT = os.getenv("SERVERCHAN_SPT") or ""
 
 
 # read接口的bash命令，本地部署时可对应替换headers、cookies
 curl_str = os.getenv('WXREAD_CURL_BASH')
-SLACK_URL = "" or os.getenv("SLACK_URL")
+SLACK_URL = os.getenv("SLACK_URL") or ""
 
 # headers、cookies是一个省略模版，本地或者docker部署时对应替换
 cookies = {

@@ -8,7 +8,7 @@ import requests
 import urllib.parse
 from push import push
 from log_utils import setup_logging
-from config import data, headers, cookies, READ_NUM, PUSH_METHOD, book, chapter
+from config import data, headers, cookies, READ_NUM, PUSH_METHOD, book, chapter, curl_str
 
 
 # 加密盐及其它默认值
@@ -47,9 +47,15 @@ def get_wr_skey():
             logging.warning(f"refresh_cookie 请求失败，payload={cookie_data}，原因：{exc}")
             continue
 
+        if response.status_code != 200:
+            logging.warning(f"refresh_cookie 响应异常，status={response.status_code}，payload={cookie_data}")
+            continue
+
         for cookie in response.headers.get('Set-Cookie', '').split(';'):
             if "wr_skey" in cookie:
                 return cookie.split('=')[-1][:8]
+
+        logging.warning(f"refresh_cookie 未返回 wr_skey，payload={cookie_data}，Set-Cookie={response.headers.get('Set-Cookie', '')[:200]}")
     return None
 
 def fix_no_synckey():
@@ -59,13 +65,19 @@ refresh_print = setup_logging()
 
 def refresh_cookie():
     logging.info("刷新 cookie")
+    if not curl_str:
+        ERROR_CODE = "未配置 WXREAD_CURL_BASH，请在 GitHub Secrets 中设置有效的 curl 命令。"
+        logging.error(ERROR_CODE)
+        push(ERROR_CODE, PUSH_METHOD)
+        raise Exception(ERROR_CODE)
+
     new_skey = get_wr_skey()
     if new_skey:
         cookies['wr_skey'] = new_skey
         logging.info(f"密钥刷新成功，新密钥：{new_skey}")
         logging.info("重新本次阅读。")
     else:
-        ERROR_CODE = "无法获取新密钥或者 WXREAD_CURL_BASH 配置有误，终止运行。"
+        ERROR_CODE = "无法获取新密钥，WXREAD_CURL_BASH 可能已过期，请重新抓包更新。"
         logging.error(ERROR_CODE)
         push(ERROR_CODE, PUSH_METHOD)
         raise Exception(ERROR_CODE)
