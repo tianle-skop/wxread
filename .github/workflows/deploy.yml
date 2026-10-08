@@ -20,6 +20,7 @@ on:
   workflow_dispatch: # 手动触发
 
 jobs:
+  
   deploy:
     runs-on: ubuntu-22.04
     environment: AutoRead # 指定环境
@@ -30,6 +31,11 @@ jobs:
           echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
           echo "nameserver 8.8.4.4" | sudo tee -a /etc/resolv.conf
 
+      - name: Debug schedule
+        run: |
+          echo "Event: ${{ github.event_name }}"
+          echo "Scheduled: ${{ github.event.schedule }}"
+          date -u
       - name: Checkout repository
         uses: actions/checkout@v2
 
